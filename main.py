@@ -49,10 +49,13 @@ def print_article(article: FinalArticle) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate an article on a given topic.")
-    parser.add_argument("topic", nargs="?", default="Artificial Intelligence", help="Topic to write about")
+    parser.add_argument("topic", nargs="?", default=None, help="Topic to write about (positional)")
+    parser.add_argument("--topic", dest="topic_flag", default=None, help="Topic to write about (flag)")
     args = parser.parse_args()
 
-    topic = args.topic
+    # --topic flag takes priority over positional, both fall back to default
+
+    topic = args.topic_flag or args.topic or "Artificial Intelligence"
     print(f"\nGenerating article on: {topic}\n")
     result = crew.kickoff(inputs={"topic": topic})
 
