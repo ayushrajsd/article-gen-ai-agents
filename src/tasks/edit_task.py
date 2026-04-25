@@ -1,5 +1,7 @@
 from crewai import Task
 from src.agents import editor
+from src.models import FinalArticle
+from src.tasks.write_task import write_task
 
 edit_task = Task(
     description=(
@@ -10,8 +12,10 @@ edit_task = Task(
         "4. Verify that all claims are supported by the cited sources."
     ),
     expected_output=(
-        "A polished, publication-ready article in markdown format "
-        "with all errors corrected and tone consistent."
+        "A polished, publication-ready article with a title, introduction, "
+        "refined body sections, and a conclusion — all errors corrected, tone consistent."
     ),
+    output_pydantic=FinalArticle,
+    context=[write_task],
     agent=editor,
 )
