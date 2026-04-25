@@ -73,11 +73,41 @@ python3 main.py
 
 You'll see the three agents work sequentially in the terminal. When finished, the article is printed and saved to `output/`.
 
-To change the topic, edit line 47 of `main.py`:
+Pass any topic as an argument:
+
+```bash
+python3 main.py "Quantum Computing"
+python3 main.py --topic "Climate Change"
+```
+
+## How SerpAPI Powers the Research
+
+The Researcher agent uses [SerpAPI](https://serpapi.com) to fetch real-time Google search results — structured as clean JSON — without dealing with scraping, proxy rotation, or CAPTCHA solving.
 
 ```python
-topic = "Quantum Computing"
+from serpapi import GoogleSearch
+
+results = GoogleSearch({
+    "q": query,
+    "api_key": os.getenv("SERPAPI_API_KEY"),
+    "num": 5,
+}).get_dict()
+
+organic = results.get("organic_results", [])
 ```
+
+Each result contains a `title`, `link`, and `snippet`. The agent compiles these into a `ResearchBrief` which flows directly into the Writer.
+
+**Why SerpAPI over scraping Google directly:**
+- Google aggressively blocks bots — SerpAPI abstracts proxy rotation and CAPTCHA solving entirely
+- Returns structured JSON, no HTML parsing needed
+- Consistent and production-reliable
+
+**Beyond Google:** SerpAPI also supports Bing, YouTube, Google News, Google Scholar, Amazon, Google Maps, and more — swap the `engine` parameter to switch sources. This project uses the default `engine=google` but could easily be extended to pull from Google News for fresher results or Google Scholar for academic topics.
+
+**Free tier:** 100 searches/month — sufficient for development and light use. Results for popular queries are cached by SerpAPI and don't count toward your quota.
+
+---
 
 ## Project Structure
 
