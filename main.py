@@ -1,6 +1,7 @@
 import warnings
 warnings.filterwarnings("ignore")
 
+import argparse
 import os
 import re
 from datetime import datetime
@@ -47,7 +48,12 @@ def print_article(article: FinalArticle) -> None:
 
 
 if __name__ == "__main__":
-    topic = "Artificial Intelligence"
+    parser = argparse.ArgumentParser(description="Generate an article on a given topic.")
+    parser.add_argument("topic", nargs="?", default="Artificial Intelligence", help="Topic to write about")
+    args = parser.parse_args()
+
+    topic = args.topic
+    print(f"\nGenerating article on: {topic}\n")
     result = crew.kickoff(inputs={"topic": topic})
 
     article = result.pydantic
