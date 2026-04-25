@@ -1,1 +1,10 @@
 .env
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+crew-env/
+*.egg-info/
+dist/
+build/
+.DS_Store
